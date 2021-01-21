@@ -41,6 +41,8 @@ router.get('/allposts',(req,res)=>{
     })
 })
 
+//Get posts from the logged in user
+
 router.get('/myposts',loginMiddleware,(req,res) => {
     Post.find({postedBy:req.user._id})
     .populate("postedBy","_id name")

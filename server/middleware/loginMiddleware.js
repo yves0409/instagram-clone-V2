@@ -3,6 +3,9 @@ const { JWT_SECRET } = require('../keys')
 const mongoose=require('mongoose')
 const User = mongoose.model('User')
 
+
+//Middleware for protected routes (only when logged in)
+
 module.exports = (req,res,next) => {
     const {authorization} = req.headers
     if(!authorization){
