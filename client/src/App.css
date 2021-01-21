@@ -26,4 +26,13 @@ a {
     max-width: 400px;
     margin: 80px auto;
   }
+  .post-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+
+  .post-item {
+      width: 30%;
+  }
 
