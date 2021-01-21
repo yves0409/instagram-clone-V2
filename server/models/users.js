@@ -1,5 +1,7 @@
 const mongoose=require('mongoose')
 
+//Auth Schema
+
 const userSchema = new mongoose.Schema({
    name :{
        type:String,
