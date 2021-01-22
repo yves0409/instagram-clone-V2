@@ -43,6 +43,9 @@ const Login = () => {
             classes: "#e57373 red lighten-2",
           });
         } else {
+          //STORING THE TOKEN IN LOCALSTORAGE
+          localStorage.setItem("jwt", data.token);
+          localStorage.setItem("user", JSON.stringify(data.user));
           M.toast({
             html: "You are now signed in",
             classes: "#1de9b6 teal accent-3",

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import M from "materialize-css";
 
@@ -9,6 +9,45 @@ const CreatePost = () => {
   const [image, setImage] = useState("");
   const [url, setUrl] = useState("");
 
+  //USING THE USEEFFECT HOOK TO ONLY MAKE THE NETWORK REQUEST WHEN THE IMAGE IS UPLOADED TO CLOUDINARY
+  useEffect(() => {
+    if (url) {
+      //REQUEST TO BACKEND
+      fetch("/createpost", {
+        method: "post",
+        headers: {
+          "content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("jwt"),
+        },
+        body: JSON.stringify({
+          title,
+          body,
+
+          picUrl: url,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          if (data.error) {
+            M.toast({
+              html: "all fields are required",
+              classes: "#e57373 red lighten-2",
+            });
+          } else {
+            M.toast({
+              html: "Posted Succesfully",
+              classes: "#1de9b6 teal accent-3",
+            });
+            history.push("/");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [url, body, history, title]);
+
   const postDetails = () => {
     const data = new FormData();
     data.append("file", image);
@@ -16,6 +55,7 @@ const CreatePost = () => {
     data.append("cloud_name", "yves"); //=> cloud name used in cloudinary site(top right)
     fetch("https://api.cloudinary.com/v1_1/yves/image/upload", {
       //=> base URL cloudinary + /image/upload
+
       method: "post",
       body: data,
     })
@@ -27,43 +67,11 @@ const CreatePost = () => {
       .catch((err) => {
         console.log(err);
       });
-
-    //REQUEST TO BACKEND
-
-    fetch("/createpost", {
-      method: "post",
-      headers: {
-        "content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        title,
-        body,
-        picUrl: url,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        if (data.error) {
-          M.toast({
-            html: "all fields are required",
-            classes: "#e57373 red lighten-2",
-          });
-        } else {
-          M.toast({
-            html: "Posted Succesfully",
-            classes: "#1de9b6 teal accent-3",
-          });
-          history.push("/");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   };
+
   return (
     <div
-      className="card input-field"
+      className="card input-filed"
       style={{
         margin: "10px auto",
         maxWidth: "500px",
@@ -83,6 +91,7 @@ const CreatePost = () => {
         value={body}
         onChange={(e) => setBody(e.target.value)}
       />
+
       <div className="file-field input-field">
         <div className="btn">
           <span>Upload image</span>
