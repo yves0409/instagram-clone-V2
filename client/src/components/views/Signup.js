@@ -10,6 +10,7 @@ const Signup = () => {
   const [password, setPassword] = useState("");
 
   const postData = () => {
+    //Validate email regex
     if (
       !/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
         email
@@ -17,10 +18,12 @@ const Signup = () => {
     ) {
       M.toast({
         html: "Invalid email",
-        classes: "#1de9b6 teal accent-3",
+        classes: "#e57373 red lighten-2",
       });
       return;
     }
+
+    //request to backend
     fetch("/signup", {
       method: "post",
       headers: {
@@ -44,8 +47,11 @@ const Signup = () => {
             html: "Signup successfull",
             classes: "#1de9b6 teal accent-3",
           });
-          history.push("/signup");
+          history.push("/login");
         }
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 
@@ -80,7 +86,7 @@ const Signup = () => {
           Signup
         </button>
         <p>
-          <Link to="/signin">Already have an account ?</Link>
+          <Link to="/login">Already have an account ?</Link>
         </p>
       </div>
     </div>
