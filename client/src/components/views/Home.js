@@ -28,7 +28,7 @@ const Home = () => {
             alt=""
           />
         </div>
-        <i class="material-icons">favorite</i>
+        <i className="material-icons">favorite</i>
 
         <div className="card-content">
           <h6>Title</h6>
