@@ -30,10 +30,12 @@ a {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
+    
   }
 
   .post-item {
       width: 30%;
+      margin-top: 15px;
   }
 
   .homepage-card {
