@@ -58,7 +58,7 @@ router.get("/myposts", loginMiddleware, (req, res) => {
 
 //Like
 
-router.put("like", loginMiddleware, (req, res) => {
+router.put("/like", loginMiddleware, (req, res) => {
   Post.findByIdAndUpdate(
     req.body.postId,
     {
@@ -78,7 +78,7 @@ router.put("like", loginMiddleware, (req, res) => {
 
 //Unlike
 
-router.put("unlike", loginMiddleware, (req, res) => {
+router.put("/unlike", loginMiddleware, (req, res) => {
   Post.findByIdAndUpdate(
     req.body.postId,
     {
