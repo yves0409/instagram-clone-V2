@@ -35,6 +35,7 @@ router.post("/createpost", loginMiddleware, (req, res) => {
 router.get("/allposts", (req, res) => {
   Post.find()
     .populate("postedBy", "_id name") //populate the 'postedBy' with only id and name
+    .populate("comments.postedBy", "_id name")
     .then((posts) => {
       res.json({ posts: posts });
     })
@@ -112,7 +113,7 @@ router.put("/comment", loginMiddleware, (req, res) => {
       new: true,
     }
   )
-    .populate("postedBy", "_id name,")
+    .populate("comments.postedBy", "_id name")
     .exec((err, result) => {
       if (err) {
         return res.status(422).json({ error: err });
