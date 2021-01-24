@@ -128,7 +128,7 @@ router.put("/comment", loginMiddleware, (req, res) => {
 router.delete("/deletepost/:postId", loginMiddleware, (req, res) => {
   Post.findOne({ _id: req.params.postId })
     .populate("postedBy", "_id")
-    .exac((err, post) => {
+    .exec((err, post) => {
       if (err || !post) {
         return res.status(422).json({ error: err });
       }
@@ -136,7 +136,7 @@ router.delete("/deletepost/:postId", loginMiddleware, (req, res) => {
         post
           .remove()
           .then((result) => {
-            res.json({ message: "post delete succes" });
+            res.json(result);
           })
           .catch((err) => {
             console.log(err);
