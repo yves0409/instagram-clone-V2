@@ -5,9 +5,12 @@ import { useParams } from "react-router-dom";
 //GET THE PROFILE FOR THE USER CLICKED ON (ROUTES/USER)
 const UserProfile = () => {
   const [userProfile, setuserProfile] = useState(null);
-  const [followbutton, setFollowbutton] = useState(true);
+
   const { state, dispatch } = useContext(UserContext);
   const { userid } = useParams();
+  const [followbutton, setFollowbutton] = useState(
+    state ? !state.following.includes(userid) : true
+  );
 
   useEffect(() => {
     fetch(`/user/${userid}`, {

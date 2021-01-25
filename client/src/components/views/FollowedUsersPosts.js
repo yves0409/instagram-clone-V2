@@ -7,7 +7,7 @@ const Home = () => {
   const { state } = useContext(UserContext);
 
   useEffect(() => {
-    fetch("./allposts", {
+    fetch("./followedusersposts", {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
@@ -160,7 +160,7 @@ const Home = () => {
             </div>
             {item.likes.includes(state._id) ? (
               <i
-                className="material-icons heart"
+                className="material-icons"
                 style={{ color: "rgb(207, 41, 41)" }}
                 onClick={() => unlikePost(item._id)}
               >

@@ -12,6 +12,8 @@ import Login from "./components/views/Login";
 import Profile from "./components/views/Profile";
 import UserProfile from "./components/views/UserProfile";
 import Signup from "./components/views/Signup";
+import FollowedUsersPosts from "./components/views/FollowedUsersPosts";
+
 import CreatePost from "./components/views/CreatePost";
 import { reducer, initialState } from "./reducers/userReducer";
 
@@ -35,6 +37,7 @@ const Routing = () => {
       <Route path="/profile/:userid" component={UserProfile} />
       <Route path="/signup" component={Signup} />
       <Route path="/createPost" component={CreatePost} />
+      <Route path="/followedusersposts" component={FollowedUsersPosts} />
       <Route path="/" exact component={Home} />
     </Switch>
   );

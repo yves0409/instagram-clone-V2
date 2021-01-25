@@ -44,5 +44,11 @@ a {
     margin: 26px auto;
   }
 
+  .material-icons {
+    cursor: pointer;
+    margin: 5px;
+   }
+
+  
   
 
