@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const loginMiddleware = require("../middleware/loginMiddleware");
 const Post = mongoose.model("Post");
 
-//Create a post route
+//CREATE A POST
 
 router.post("/createpost", loginMiddleware, (req, res) => {
   const { title, body, picUrl } = req.body;
@@ -30,7 +30,7 @@ router.post("/createpost", loginMiddleware, (req, res) => {
     });
 });
 
-//Get all posts route
+//GET ALL POSTS
 
 router.get("/allposts", (req, res) => {
   Post.find()
@@ -44,7 +44,7 @@ router.get("/allposts", (req, res) => {
     });
 });
 
-//Get posts from the logged in user
+//GET POSTS FROM LOGGED IN USER
 
 router.get("/myposts", loginMiddleware, (req, res) => {
   Post.find({ postedBy: req.user._id })
@@ -57,7 +57,7 @@ router.get("/myposts", loginMiddleware, (req, res) => {
     });
 });
 
-//Like
+//LIKE
 
 router.put("/like", loginMiddleware, (req, res) => {
   Post.findByIdAndUpdate(
@@ -77,7 +77,7 @@ router.put("/like", loginMiddleware, (req, res) => {
   });
 });
 
-//Unlike
+//UNLIKE
 
 router.put("/unlike", loginMiddleware, (req, res) => {
   Post.findByIdAndUpdate(
@@ -97,7 +97,7 @@ router.put("/unlike", loginMiddleware, (req, res) => {
   });
 });
 
-//Comment
+//COMMENT
 
 router.put("/comment", loginMiddleware, (req, res) => {
   const comment = {
@@ -123,7 +123,7 @@ router.put("/comment", loginMiddleware, (req, res) => {
     });
 });
 
-//Delete post
+//DELETE POST
 
 router.delete("/deletepost/:postId", loginMiddleware, (req, res) => {
   Post.findOne({ _id: req.params.postId })
@@ -142,6 +142,21 @@ router.delete("/deletepost/:postId", loginMiddleware, (req, res) => {
             console.log(err);
           });
       }
+    });
+});
+
+//GET POSTS FROM USERS THAT ACTIVE USER FOLLOWS
+
+router.get("/followedusersposts", loginMiddleware, (req, res) => {
+  //$in:req.user.following only finds the post of the users i am following!
+  Post.find({ postedBy: { $in: req.user.following } })
+    .populate("postedBy", "_id name") //populate the 'postedBy' with only id and name
+    .populate("comments.postedBy", "_id name")
+    .then((posts) => {
+      res.json({ posts: posts });
+    })
+    .catch((err) => {
+      console.log(err);
     });
 });
 

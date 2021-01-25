@@ -88,6 +88,7 @@ const UserProfile = () => {
             },
           };
         });
+        setFollowbutton(true);
       });
   };
 

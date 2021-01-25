@@ -38,6 +38,7 @@ const Profile = () => {
         </div>
         <div>
           <h4>{state ? state.name : "loading"} </h4>
+          <h6>{state ? state.email : "loading"} </h6>
 
           <div
             style={{
