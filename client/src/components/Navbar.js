@@ -23,6 +23,7 @@ const Navbar = () => {
               dispatch({ type: "CLEAR" });
               history.push("/login");
             }}
+            style={{ marginRight: "10px" }}
           >
             Logout
           </button>

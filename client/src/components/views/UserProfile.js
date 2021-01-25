@@ -2,8 +2,10 @@ import React, { useEffect, useState, useContext } from "react";
 import { UserContext } from "../../App";
 import { useParams } from "react-router-dom";
 
+//GET THE PROFILE FOR THE USER CLICKED ON (ROUTES/USER)
 const UserProfile = () => {
   const [userProfile, setuserProfile] = useState(null);
+  const [followbutton, setFollowbutton] = useState(true);
   const { state, dispatch } = useContext(UserContext);
   const { userid } = useParams();
 
@@ -15,10 +17,80 @@ const UserProfile = () => {
     })
       .then((res) => res.json())
       .then((result) => {
-        setuserProfile(result);
         console.log(result);
+        setuserProfile(result);
       });
   }, [userid]);
+
+  //FOLLOW USER (ROUTES/USER)
+  const followUser = () => {
+    fetch("/follow", {
+      method: "put",
+      headers: {
+        "content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+      body: JSON.stringify({
+        followId: userid,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        dispatch({
+          type: "UPDATE",
+          payload: { following: data.following, follower: data.follower },
+        });
+        localStorage.setItem("user", JSON.stringify(data));
+        setuserProfile((prevState) => {
+          return {
+            ...prevState,
+            user: {
+              ...prevState.user,
+              follower: [...prevState.user.follower, data._id],
+            },
+          };
+        });
+        setFollowbutton(false);
+      });
+  };
+
+  //UNFOLLOW USER (ROUTES/USER)
+  const unfollowUser = () => {
+    fetch("/unfollow", {
+      method: "put",
+      headers: {
+        "content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+      body: JSON.stringify({
+        unfollowId: userid,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        dispatch({
+          type: "UPDATE",
+          payload: { following: data.following, follower: data.follower },
+        });
+        localStorage.setItem("user", JSON.stringify(data));
+        setuserProfile((prevState) => {
+          const updatedFollower = prevState.user.follower.filter(
+            (item) => item !== data._id
+          );
+
+          return {
+            ...prevState,
+            user: {
+              ...prevState.user,
+              follower: updatedFollower,
+            },
+          };
+        });
+      });
+  };
+
   return (
     <>
       {userProfile ? (
@@ -55,9 +127,28 @@ const UserProfile = () => {
                 }}
               >
                 <h6>{userProfile.posts.length} posts</h6>
-                <h6>20k followers</h6>
-                <h6>640 following</h6>
+                <h6>{userProfile.user.follower.length} followers</h6>
+                <h6>{userProfile.user.following.length} following</h6>
               </div>
+              {followbutton ? (
+                <button
+                  className="btn waves-effect waves-light #82b1ff blue accent-1
+"
+                  onClick={() => followUser()}
+                  style={{ margin: "10px" }}
+                >
+                  Follow
+                </button>
+              ) : (
+                <button
+                  className="btn waves-effect waves-light #82b1ff blue accent-1
+"
+                  onClick={() => unfollowUser()}
+                  style={{ margin: "10px" }}
+                >
+                  UnFollow
+                </button>
+              )}
             </div>
           </div>
           <div className="post-gallery">

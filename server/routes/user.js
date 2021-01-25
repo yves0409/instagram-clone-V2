@@ -5,6 +5,7 @@ const loginMiddleware = require("../middleware/loginMiddleware");
 const Post = mongoose.model("Post");
 const User = mongoose.model("User");
 
+//GET PROFILE USER CLICKED ON
 router.get("/user/:id", loginMiddleware, (req, res) => {
   User.findOne({ _id: req.params.id })
 
@@ -26,7 +27,7 @@ router.get("/user/:id", loginMiddleware, (req, res) => {
 
 //FOLLOW ROUTE
 
-router.put("/follow", (req, res) => {
+router.put("/follow", loginMiddleware, (req, res) => {
   User.findByIdAndUpdate(
     req.body.followId,
     {
@@ -46,6 +47,7 @@ router.put("/follow", (req, res) => {
     },
     { new: true }
   )
+    .select("-password")
     .then((result) => {
       res.json(result);
     })
@@ -56,7 +58,7 @@ router.put("/follow", (req, res) => {
 
 //UNFOLLOW ROUTE
 
-router.put("/unfollow", (req, res) => {
+router.put("/unfollow", loginMiddleware, (req, res) => {
   User.findByIdAndUpdate(
     req.body.unfollowId,
     {
@@ -76,6 +78,7 @@ router.put("/unfollow", (req, res) => {
     },
     { new: true }
   )
+    .select("-password")
     .then((result) => {
       res.json(result);
     })
