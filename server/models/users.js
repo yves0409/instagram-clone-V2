@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { ObjectId } = mongoose.Schema.Types;
 
 //Auth Schema
 
@@ -15,6 +16,18 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  followes: [
+    {
+      type: ObjectId,
+      ref: "User",
+    },
+  ],
+  following: [
+    {
+      type: ObjectId,
+      ref: "User",
+    },
+  ],
 });
 
 mongoose.model("User", userSchema);
