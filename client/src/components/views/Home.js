@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../App";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const [data, setData] = useState([]);
-  const { state, dispatch } = useContext(UserContext);
+  const { state } = useContext(UserContext);
 
   useEffect(() => {
     fetch("./allposts", {
@@ -129,14 +130,25 @@ const Home = () => {
   return (
     <div className="home">
       {data.map((item) => {
+        console.log(item);
         return (
           <div className="card homepage-card" key={item._id}>
-            <h5 style={{ padding: "10px" }}>
-              {item.postedBy.name}
+            <h5 style={{ padding: "5px" }}>
+              <Link
+                to={
+                  item.postedBy._id !== state._id
+                    ? "/profile/" + item.postedBy._id
+                    : "/profile"
+                }
+              >
+                {item.postedBy.name}
+              </Link>{" "}
               {item.postedBy._id == state._id && (
                 <i
                   className="material-icons"
-                  style={{ float: "right" }}
+                  style={{
+                    float: "right",
+                  }}
                   onClick={() => deletePost(item._id)}
                 >
                   delete

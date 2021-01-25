@@ -5,7 +5,7 @@ const Profile = () => {
   const [myposts, setMyposts] = useState([]);
   const { state, dispatch } = useContext(UserContext);
   useEffect(() => {
-    fetch("./myposts", {
+    fetch("/myposts", {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
@@ -47,7 +47,7 @@ const Profile = () => {
               margin: "10px",
             }}
           >
-            <h6>36 posts</h6>
+            <h6>{myposts.length} posts</h6>
             <h6>20k followers</h6>
             <h6>640 following</h6>
           </div>

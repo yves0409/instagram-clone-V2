@@ -5,8 +5,9 @@ const loginMiddleware = require("../middleware/loginMiddleware");
 const Post = mongoose.model("Post");
 const User = mongoose.model("User");
 
-router.get("user/:d", (req, res) => {
+router.get("/user/:id", loginMiddleware, (req, res) => {
   User.findOne({ _id: req.params.id })
+
     .select("-password")
     .then((user) => {
       Post.find({ postedBy: req.params.id })
@@ -15,12 +16,13 @@ router.get("user/:d", (req, res) => {
           if (err) {
             return res.status(422).json({ error: err });
           }
-          res.json((user, posts));
+          res.json({ user, posts });
         });
     })
     .catch((err) => {
       return res.status(404).json({ error: "User Not Found" });
     });
+  //console.log(user);
 });
 
 module.exports = router;

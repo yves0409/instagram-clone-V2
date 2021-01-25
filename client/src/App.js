@@ -10,6 +10,7 @@ import {
 import Home from "./components/views/Home";
 import Login from "./components/views/Login";
 import Profile from "./components/views/Profile";
+import UserProfile from "./components/views/UserProfile";
 import Signup from "./components/views/Signup";
 import CreatePost from "./components/views/CreatePost";
 import { reducer, initialState } from "./reducers/userReducer";
@@ -26,11 +27,12 @@ const Routing = () => {
     } else {
       history.push("/login");
     }
-  }, []);
+  }, [dispatch, history]);
   return (
     <Switch>
       <Route path="/login" component={Login} />
-      <Route path="/profile" component={Profile} />
+      <Route path="/profile" exact component={Profile} />
+      <Route path="/profile/:userid" component={UserProfile} />
       <Route path="/signup" component={Signup} />
       <Route path="/createPost" component={CreatePost} />
       <Route path="/" exact component={Home} />
