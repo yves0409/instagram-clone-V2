@@ -48,8 +48,8 @@ const Profile = () => {
             }}
           >
             <h6>{myposts.length} posts</h6>
-            <h6>20k followers</h6>
-            <h6>640 following</h6>
+            <h6>{state ? state.follower.length : "..."} followers</h6>
+            <h6>{state ? state.following.length : "..."} following</h6>
           </div>
         </div>
       </div>
