@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import M from "materialize-css";
 
@@ -8,8 +8,36 @@ const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [profilePic, setProfilePic] = useState("");
+  const [url, setUrl] = useState(undefined);
 
-  const postData = () => {
+  useEffect(() => {
+    if (url) {
+      uploadFields();
+    }
+  }, [url]);
+
+  const uploadProfilePic = () => {
+    const data = new FormData();
+    data.append("file", profilePic);
+    data.append("upload_preset", "instagram-clone"); //=> name you gave the project in cloudinary
+    data.append("cloud_name", "yves"); //=> cloud name used in cloudinary site(top right)
+    fetch("https://api.cloudinary.com/v1_1/yves/image/upload", {
+      //=> base URL cloudinary + /image/upload
+
+      method: "post",
+      body: data,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setUrl(data.url);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const uploadFields = () => {
     //Validate email regex
     if (
       !/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
@@ -33,6 +61,7 @@ const Signup = () => {
         name,
         password,
         email,
+        pic: url,
       }),
     })
       .then((res) => res.json())
@@ -53,6 +82,13 @@ const Signup = () => {
       .catch((err) => {
         console.log(err);
       });
+  };
+  const postData = () => {
+    if (profilePic) {
+      uploadProfilePic();
+    } else {
+      uploadFields();
+    }
   };
 
   return (
@@ -77,6 +113,18 @@ const Signup = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+        <div className="file-field input-field">
+          <div className="btn">
+            <span>Set Profile Picture</span>
+            <input
+              type="file"
+              onChange={(e) => setProfilePic(e.target.files[0])}
+            />
+          </div>
+          <div className="file-path-wrapper">
+            <input type="text" className="file-path-validate" />
+          </div>
+        </div>
 
         <button
           className="btn waves-effect waves-light #82b1ff blue accent-1

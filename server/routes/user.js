@@ -11,8 +11,9 @@ router.get("/user/:id", loginMiddleware, (req, res) => {
 
     .select("-password")
     .then((user) => {
+      console.log(user);
       Post.find({ postedBy: req.params.id })
-        .populate("postedBy", "_id name")
+        .populate("postedBy", "_id name pic")
         .exec((err, posts) => {
           if (err) {
             return res.status(422).json({ error: err });

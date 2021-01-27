@@ -7,12 +7,12 @@ const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../keys");
 const loginMiddleware = require("../middleware/loginMiddleware");
 
-router.get("/protected", loginMiddleware, (req, res) => {
-  res.send("Welcome user");
-});
+// router.get("/protected", loginMiddleware, (req, res) => {
+//   res.send("Welcome user");
+// });
 
 router.post("/signup", (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, pic } = req.body;
   if (!email || !name || !password) {
     return res.status(422).json({ error: "Please fill all required fields" });
   }
@@ -28,6 +28,7 @@ router.post("/signup", (req, res) => {
           name,
           email,
           password: hashedpassword,
+          pic,
         });
         user.save((user) => {
           res.json({ message: "User saved to db" });
@@ -57,8 +58,11 @@ router.post("/signin", (req, res) => {
         if (doMatch) {
           //res.json({message:'Succesfully signed in'})
           const token = jwt.sign({ _id: savedUser._id }, JWT_SECRET);
-          const { _id, name, email, follower, following } = savedUser;
-          res.json({ token, user: { _id, name, email, follower, following } });
+          const { _id, name, email, follower, following, pic } = savedUser;
+          res.json({
+            token,
+            user: { _id, name, email, follower, following, pic },
+          });
         } else {
           return res.status(422).json({ error: "Invalid credentials" });
         }

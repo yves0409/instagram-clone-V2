@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 const Home = () => {
   const [data, setData] = useState([]);
   const { state } = useContext(UserContext);
+  //console.log(state);
 
   useEffect(() => {
     fetch("./allposts", {
@@ -62,8 +63,8 @@ const Home = () => {
     })
       .then((res) => res.json())
       .then((result) => {
-        console.log(result);
         //console.log(result);
+
         const newData = data.map((item) => {
           if (item._id === result._id) {
             return result;
@@ -93,7 +94,7 @@ const Home = () => {
     })
       .then((res) => res.json())
       .then((result) => {
-        console.log(result);
+        //console.log(result);
         const newData = data.map((item) => {
           if (item._id === result._id) {
             return result;
@@ -119,7 +120,7 @@ const Home = () => {
     })
       .then((res) => res.json())
       .then((result) => {
-        console.log(result);
+        //console.log(result);
         const newData = data.filter((item) => {
           return item._id !== result._id;
         });
@@ -130,30 +131,47 @@ const Home = () => {
   return (
     <div className="home">
       {data.map((item) => {
-        console.log(item);
+        // console.log(item);
         return (
           <div className="card homepage-card" key={item._id}>
             <h5 style={{ padding: "5px" }}>
-              <Link
-                to={
-                  item.postedBy._id !== state._id
-                    ? "/profile/" + item.postedBy._id
-                    : "/profile"
-                }
-              >
-                {item.postedBy.name}
-              </Link>{" "}
-              {item.postedBy._id === state._id && (
-                <i
-                  className="material-icons"
-                  style={{
-                    float: "right",
-                  }}
-                  onClick={() => deletePost(item._id)}
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <Link
+                  to={
+                    item.postedBy._id !== state._id
+                      ? "/profile/" + item.postedBy._id
+                      : "/profile"
+                  }
                 >
-                  delete
-                </i>
-              )}
+                  <div style={{ display: "flex" }}>
+                    <img
+                      src={item.postedBy.pic}
+                      alt="pict"
+                      style={{
+                        height: "55px",
+                        width: "55px",
+                        borderRadius: "50%",
+                      }}
+                    />
+                    <div style={{ paddingLeft: "10px", fontSize: "17px" }}>
+                      {item.postedBy.name}
+                    </div>
+                  </div>
+
+                  {}
+                </Link>{" "}
+                {item.postedBy._id === state._id && (
+                  <i
+                    className="material-icons"
+                    style={{
+                      float: "right",
+                    }}
+                    onClick={() => deletePost(item._id)}
+                  >
+                    delete
+                  </i>
+                )}
+              </div>
             </h5>
             <div className="card-image">
               <img src={item.photo} alt="pic" />
